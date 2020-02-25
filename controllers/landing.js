@@ -17,3 +17,45 @@ exports.show_leads = function (req, res, next) {
     res.render('landing', { title: 'Express', leads: leads });
   });
 }
+
+exports.show_lead = function (req, res, next) {
+  return models.Lead.findOne({
+    where: {
+      id: req.params.lead_id
+    }
+  }).then(result => {
+    res.render('lead', { lead: result });
+  });
+}
+
+exports.show_edit_lead = function (req, res, next) {
+  return models.Lead.findOne({
+    where: {
+      id: req.params.lead_id
+    }
+  }).then(result => {
+    res.render('lead/edit_lead', { lead: result });
+  });
+}
+
+exports.edit_lead = function (req, res, next) {
+  return models.Lead.update({
+    email: req.body.lead_email
+  }, {
+    where: {
+      id: req.params.lead_id
+    }
+  }).then(result => {
+    res.redirect('/lead/' + req.params.lead_id);
+  });
+}
+
+exports.delete_lead = function (req, res, next) {
+  return models.Lead.destroy({
+    where: {
+      id: req.params.lead_id
+    }
+  }).then(result => {
+    res.redirect('/leads');
+  })
+}
